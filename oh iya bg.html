@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenz Store - Auto Testi Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Poppins', sans-serif;
+            background: #0f172a; 
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom File Input Upload Button */
+        .upload-area {
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #3b82f6; 
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Glowing Button */
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
+            transform: scale(1.02);
+        }
+        .btn-glow-green {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-glow-green:hover {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
+            transform: scale(1.02);
+        }
+        
+        /* Gradient Text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #60a5fa, #a78bfa);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 sm:p-8">
+
+    <div class="max-w-lg w-full glass-panel rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+        
+        <!-- Decorative Glow -->
+        <div class="absolute top-[-50px] left-[-50px] w-32 h-32 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="absolute bottom-[-50px] right-[-50px] w-32 h-32 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+
+        <!-- Header -->
+        <div class="text-center mb-8 relative z-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 text-gradient">TESTI MAKER</h1>
+            <p class="text-slate-400 text-sm font-light">Auto Generate Bukti Transaksi Kenz Store</p>
+        </div>
+
+        <div class="space-y-6 relative z-10">
+            
+            <!-- Upload Foto TRX Proses -->
+            <div>
+                <label class="block mb-2 text-sm font-semibold text-slate-300 flex items-center gap-2">
+                    <i class="fas fa-image text-blue-400"></i> Foto TRX Proses (Kotak Kiri)
+                </label>
+                <div class="relative upload-area border-2 border-dashed border-slate-600 rounded-2xl p-1 bg-slate-800/50">
+                    <input type="file" id="proses" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-slate-700 file:text-white hover:file:bg-slate-600 cursor-pointer outline-none">
+                </div>
+            </div>
+
+            <!-- Upload Foto TRX Done -->
+            <div>
+                <label class="block mb-2 text-sm font-semibold text-slate-300 flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400"></i> Foto TRX Done (Kotak Kanan)
+                </label>
+                <div class="relative upload-area border-2 border-dashed border-slate-600 rounded-2xl p-1 bg-slate-800/50">
+                    <input type="file" id="done" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-slate-700 file:text-white hover:file:bg-slate-600 cursor-pointer outline-none">
+                </div>
+            </div>
+
+            <!-- Button Bikin -->
+            <button id="btnGenerate" onclick="generateTesti()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-2xl mt-4 text-lg tracking-widest btn-glow flex justify-center items-center gap-3">
+                <i class="fas fa-magic"></i> BIKIN TESTI SEKARANG
+            </button>
+        </div>
+
+        <!-- Hasil Canvas -->
+        <div id="resultContainer" class="mt-10 hidden flex-col items-center border-t border-slate-700/50 pt-8 relative z-10">
+            <div class="inline-flex items-center justify-center space-x-2 bg-green-500/10 text-green-400 px-4 py-2 rounded-full mb-6 border border-green-500/20">
+                <i class="fas fa-check-circle"></i>
+                <span class="text-sm font-semibold tracking-wide">TESTIMONI SIAP</span>
+            </div>
+            
+            <canvas id="canvas" class="hidden"></canvas>
+            
+            <!-- Preview Frame -->
+            <div class="relative p-1 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 mb-6 shadow-2xl">
+                <img id="previewImg" class="w-full rounded-xl" alt="Hasil Testimoni">
+            </div>
+
+            <button onclick="downloadTesti()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-3 text-lg tracking-widest btn-glow-green">
+                <i class="fas fa-download"></i> DOWNLOAD FOTO
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi membaca file dari folder/galeri
+        function loadUploadedImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.onerror = () => reject(new Error("Format gambar rusak."));
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(new Error("Gagal membaca file."));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Fungsi meload template otomatis dari file template.jpg di Github
+        function loadAutoTemplate() {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error("Gagal memuat template kosongan. Pastikan file template.jpg sudah diupload ke Github."));
+                img.src = 'template.jpg'; 
+            });
+        }
+
+        async function generateTesti() {
+            const prosesFile = document.getElementById('proses').files[0];
+            const doneFile = document.getElementById('done').files[0];
+
+            if (!prosesFile || !doneFile) {
+                alert("⚠️ Masukkan dulu foto Proses dan Done nya, Bosku!");
+                return;
+            }
+
+            const btn = document.getElementById('btnGenerate');
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> MEMPROSES...`;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+            btn.disabled = true;
+
+            try {
+                const templateImg = await loadAutoTemplate();
+                const prosesImg = await loadUploadedImage(prosesFile);
+                const doneImg = await loadUploadedImage(doneFile);
+
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = templateImg.width;
+                canvas.height = templateImg.height;
+
+                // 1. Gambar Template
+                ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+
+                /* =======================================================
+                   KOORDINAT BARU (Diperbaiki agar muat di DALAM garis putih)
+                   ======================================================= */
+                const W = canvas.width;
+                const H = canvas.height;
+
+                // Lebar dan Tinggi foto sekarang lebih kecil agar masuk akal
+                const box_Width = W * 0.325;  
+                const box_Height = H * 0.380; 
+
+                // Posisi Y (Atas) diturunkan sedikit agar tidak nabrak garis atas
+                const pos_Y = H * 0.385; 
+
+                // Posisi X untuk kotak Kiri digeser ke kanan dikit
+                const left_X = W * 0.145; 
+
+                // Posisi X untuk kotak Kanan digeser ke kiri dikit
+                const right_X = W * 0.530; 
+
+                // 2. Tempel Foto ke Canvas
+                ctx.drawImage(prosesImg, left_X, pos_Y, box_Width, box_Height);
+                ctx.drawImage(doneImg, right_X, pos_Y, box_Width, box_Height);
+
+                // Tampilkan hasil
+                const previewImg = document.getElementById('previewImg');
+                previewImg.src = canvas.toDataURL('image/png');
+
+                const resultContainer = document.getElementById('resultContainer');
+                resultContainer.classList.remove('hidden');
+                resultContainer.classList.add('flex');
+                
+                resultContainer.style.opacity = 0;
+                setTimeout(() => {
+                    resultContainer.style.transition = "opacity 0.5s ease";
+                    resultContainer.style.opacity = 1;
+                    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+
+            } catch (error) {
+                alert("⚠️ Error: " + error.message);
+                console.error(error);
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                btn.disabled = false;
+            }
+        }
+
+        function downloadTesti() {
+            const canvas = document.getElementById('canvas');
+            const link = document.createElement('a');
+            const date = new Date().getTime();
+            link.download = `Testi-KenzStore-${date}.png`; 
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
